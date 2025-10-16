@@ -8,6 +8,7 @@
   body {
     background: #f0f3f5; /* warna kalem biru muda */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -32,12 +33,45 @@
     background: url('https://i.imgur.com/kxPZm4O.png') no-repeat center; /* gambar wajah kucing kecil */
     background-size: cover;
   }
+  /* Kontrol tombol */
+  #controls {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    user-select: none;
+  }
+  #controls button {
+    background: #a1c6e7;
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px #7298c1;
+    transition: background 0.3s ease;
+  }
+  #controls button:active {
+    box-shadow: 0 2px #7298c1;
+    transform: translateY(2px);
+  }
+  #controls button:hover {
+    background: #8bb3e1;
+  }
 </style>
 </head>
 <body>
 
 <div id="tetris">
   <canvas id="game" width="320" height="640"></canvas>
+</div>
+
+<div id="controls">
+  <button id="left">◀️</button>
+  <button id="down">⬇️</button>
+  <button id="rotate">⟳</button>
+  <button id="right">▶️</button>
 </div>
 
 <script>
@@ -199,6 +233,7 @@
 
   function playerRotate(dir) {
     const matrix = player.matrix;
+    const pos = player.pos.x;
     for(let y=0; y<matrix.length; ++y){
       for(let x=0; x<y; ++x){
         [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
@@ -248,7 +283,7 @@
   playerReset();
   update();
 
-  // Kontrol sentuh dan keyboard
+  // Kontrol keyboard
   document.addEventListener('keydown', event => {
     if(event.key === 'ArrowLeft'){
       playerMove(-1);
@@ -259,6 +294,20 @@
     } else if(event.key === 'ArrowUp'){
       playerRotate(1);
     }
+  });
+
+  // Kontrol tombol klik
+  document.getElementById('left').addEventListener('click', () => {
+    playerMove(-1);
+  });
+  document.getElementById('right').addEventListener('click', () => {
+    playerMove(1);
+  });
+  document.getElementById('down').addEventListener('click', () => {
+    playerDrop();
+  });
+  document.getElementById('rotate').addEventListener('click', () => {
+    playerRotate(1);
   });
 
   // Kontrol sentuh (swipe dan tap)
